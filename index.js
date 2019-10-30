@@ -15,13 +15,16 @@
 
     // Initialize the shaders and program
     var vertexShader = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v1.vertex);
-    var fragmentShader = glUtils.getShader(gl, gl.FRAGMENT_SHADER, glUtils.SL.Shaders.v1.fragment);
-    var program = glUtils.createProgram(gl, vertexShader, fragmentShader);
-
     var vertexShader2 = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v2.vertex);
+    var vertexShader3 = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v3.vertex);
+    var fragmentShader = glUtils.getShader(gl, gl.FRAGMENT_SHADER, glUtils.SL.Shaders.v1.fragment);
+    
+    var program = glUtils.createProgram(gl, vertexShader, fragmentShader);
     var program2 = glUtils.createProgram(gl, vertexShader2, fragmentShader);
+    var program3 = glUtils.createProgram(gl, vertexShader3, fragmentShader);
 
-    canvas.addEventListener('mousedown', function(event) { onmousedown(event, points); });
+    resizer();
+
 
     var linesVertices1 = new Float32Array([
       -0.4, 0.5,     1.0, 1.0, 0.0,
