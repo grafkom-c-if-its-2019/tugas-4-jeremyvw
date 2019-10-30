@@ -1,17 +1,17 @@
 (function(global) {
 
   var points=[];
-  var canvas2, gl2, program2;
+  var canvas, canvas2, gl, gl2, program2;
 
   glUtils.SL.init({ callback:function() { main(); } });
 
   function main() {
     // Register Callbacks
-    // window.addEventListener('resize', resizer);
+    window.addEventListener('resize', resizer);
 
     // Get canvas element and check if WebGL enabled
-    var canvas = document.getElementById("glcanvas");
-    var gl = glUtils.checkWebGL(canvas);
+    canvas = document.getElementById("glcanvas");
+    gl = glUtils.checkWebGL(canvas);
 
     // Initialize the shaders and program
     var vertexShader = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v1.vertex);
