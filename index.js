@@ -293,37 +293,41 @@
     requestAnimationFrame(render);
   }
    
-    function drawShapes(type,vertices,n){
-      var triangleVertexBufferObject = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBufferObject);
-  
-      var vPosition = gl.getAttribLocation(program, 'vPosition');
-      var vColor = gl.getAttribLocation(program, 'vColor');
-    
-      gl.vertexAttribPointer(
-        vPosition,  // variabel yang memegang posisi attribute di shader
-        2,          // jumlah elemen per atribut
-        gl.FLOAT,   // tipe data atribut
-        gl.FALSE, 
-        5 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap vertex 
-        0                                   // offset dari posisi elemen di array
-      );
-      gl.vertexAttribPointer(
-        vColor,
-        3,
-        gl.FLOAT,
-        gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT,
-        2 * Float32Array.BYTES_PER_ELEMENT
-      );
-      gl.enableVertexAttribArray(vPosition);
-      gl.enableVertexAttribArray(vColor);
-  
-      var vPosition = gl.getAttribLocation(program, 'vPosition');
-      var vColor = gl.getAttribLocation(program, 'vColor');
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-      gl.drawArrays(type, 0, n);
-    }  
+  function drawShapes(type, vertices, n) {
+    var vertexBufferObject = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);
+
+    var vPosition = gl.getAttribLocation(program, 'vPosition');
+    var vColor = gl.getAttribLocation(program, 'vColor');
+    gl.vertexAttribPointer(
+      vPosition, //variabel pemegang posisi atribut di shader
+      3,          // jumlah elemen per atribut
+      gl.FLOAT,   // tipe data atribut
+      gl.FALSE,
+      6 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap vertex
+      0
+    );
+    gl.vertexAttribPointer(
+      vColor,
+      3,
+      gl.FLOAT,
+      gl.FALSE,
+      6 * Float32Array.BYTES_PER_ELEMENT,
+      3 * Float32Array.BYTES_PER_ELEMENT
+    );
+    gl.enableVertexAttribArray(vPosition);
+    gl.enableVertexAttribArray(vColor);
+
+    var vPosition = gl.getAttribLocation(program, 'vPosition');
+    var vColor = gl.getAttribLocation(program, 'vColor');
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+    gl.uniform3fv(transLoc, trans);
+
+    gl.enableVertexAttribArray(vPosition);
+    gl.enableVertexAttribArray(vColor);
+    gl.drawArrays(type, 0, n);
+  }  
 
     
     var thetaLoc1 = gl.getUniformLocation(program2, 'theta1'); 
