@@ -1,8 +1,5 @@
 (function(global) {
-
-  var points=[];
-  var canvas, canvas2, gl, gl2, program2;
-
+  
   glUtils.SL.init({ callback:function() { main(); } });
 
   function main() {
