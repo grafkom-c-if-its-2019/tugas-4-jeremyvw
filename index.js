@@ -98,7 +98,48 @@
       quad(5, 4, 0, 1);
       quad(6, 5, 1, 2);
   
+      //Mouse Control
+      var dragging, lastx, lasty;
+      function onMouseDown(event) {
+        var x = event.clientX;
+        var y = event.clientY;
+        var rect = event.target.getBoundingClientRect();
+        // Saat mouse diklik di area aktif browser,
+        //  maka flag dragging akan diaktifkan
+        if (
+          rect.left <= x &&
+          rect.right > x &&
+          rect.top <= y &&
+          rect.bottom > y
+        ) {
+          dragging = true;
+          lastx = x;
+          lasty = y;
+        }
+      }
+      function onMouseUp(event) {
+        // Ketika klik kiri mouse dilepas
+        dragging = false;
+      }
+      function onMouseMove(event) {
+        var x = event.clientX;
+        var y = event.clientY;
+        if (dragging) {
+          factor = 10 / canvas.height;
+          var dx = factor * (x - lastx);
+          var dy = factor * (y - lasty);
+          // Menggunakan dx dan dy untuk memutar kubus
+          glMatrix.mat4.rotateY(mm, mm, dx);
+          glMatrix.mat4.rotateX(mm, mm, dy);
+        }
+        lastx = x;
+        lasty = y;
+      }
+      document.addEventListener('mousedown', onMouseDown);
+      document.addEventListener('mouseup', onMouseUp);
+      document.addEventListener('mousemove', onMouseMove);
 
+      
     var linesVertices1 = new Float32Array([
       -0.4, 0.5,     1.0, 1.0, 0.0,
       -0.3, 0.5,     0.7, 0.0, 1.0        
