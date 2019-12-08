@@ -1,24 +1,27 @@
 (function(global) {
-  
+
   glUtils.SL.init({ callback:function() { main(); } });
 
   function main() {
-    // Register Callbacks
-    window.addEventListener('resize', resizer);
-
-    // Get canvas element and check if WebGL enabled
-    canvas = document.getElementById("glcanvas");
-    gl = glUtils.checkWebGL(canvas);
-
-    // Initialize the shaders and program
-    var vertexShader = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v1.vertex);
-    var vertexShader2 = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v2.vertex);
-    var vertexShader3 = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v3.vertex);
-    var fragmentShader = glUtils.getShader(gl, gl.FRAGMENT_SHADER, glUtils.SL.Shaders.v1.fragment);
-    
-    var program = glUtils.createProgram(gl, vertexShader, fragmentShader);
-    var program2 = glUtils.createProgram(gl, vertexShader2, fragmentShader);
-    var program3 = glUtils.createProgram(gl, vertexShader3, fragmentShader);
+    var thetaSpeed, mmLoc, mm, vmLoc, vm, pmLoc, pm, camera;
+      var dcLoc, dc, ddLoc, dd, acLoc, ac, nmLoc;
+      var vPosition, vColor, vNormal, vTexCoord;
+      var flag, flagUniformLocation, fFlagUniformLocation;
+  
+      var canvas = document.getElementById("glcanvas");
+      var gl = glUtils.checkWebGL(canvas);
+  
+      var vertexShader = glUtils.getShader(gl, gl.VERTEX_SHADER, glUtils.SL.Shaders.v1.vertex);
+      var fragmentShader = glUtils.getShader(gl, gl.FRAGMENT_SHADER, glUtils.SL.Shaders.v1.fragment);
+      var program = glUtils.createProgram(gl, vertexShader, fragmentShader);
+      gl.useProgram(program);
+      
+      var transLoc = gl.getUniformLocation(program, 'trans');
+      var trans = [0, 0, 0]; 
+      var X = 1.0;
+      var Y = 1.0;
+      var Z = 1.0;
+      var melebar = 1.0
 
     resizer();
 
