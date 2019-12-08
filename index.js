@@ -329,6 +329,48 @@
     gl.drawArrays(type, 0, n);
   }  
 
+  function drawCube(type,vertices,n) {
+    var vertexBufferObject = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+    vPosition = gl.getAttribLocation(program, 'vPosition');
+    vNormal = gl.getAttribLocation(program, 'vNormal');
+    vTexCoord = gl.getAttribLocation(program, 'vTexCoord');
+
+    gl.vertexAttribPointer(
+      vPosition,   //variable yang memegang posisis attribute di shader
+      3,          // jumlah elemen per atribut vPosition
+      gl.FLOAT,   // tipe data atribut
+      gl.FALSE,
+      11 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap vertex (overall)
+      0                                    // offset dari posisi elemen di array
+    );
+
+    gl.vertexAttribPointer(
+      vNormal,
+      3,
+      gl.FLOAT,
+      gl.FALSE,
+      11 * Float32Array.BYTES_PER_ELEMENT,
+      6 * Float32Array.BYTES_PER_ELEMENT
+    );
+
+    gl.vertexAttribPointer(
+      vTexCoord,
+      2,
+      gl.FLOAT,
+      gl.FALSE,
+      11 * Float32Array.BYTES_PER_ELEMENT,
+      9 * Float32Array.BYTES_PER_ELEMENT
+    );
+
+    gl.enableVertexAttribArray(vPosition);
+    gl.enableVertexAttribArray(vNormal);
+    gl.enableVertexAttribArray(vTexCoord);
+    gl.drawArrays(type, 0, n);
+  }
+
     
     var thetaLoc1 = gl.getUniformLocation(program2, 'theta1'); 
     var transLoc1 = gl.getUniformLocation(program2, 'trans1');
