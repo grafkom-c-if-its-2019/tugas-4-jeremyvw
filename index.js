@@ -139,7 +139,7 @@
       document.addEventListener('mouseup', onMouseUp);
       document.addEventListener('mousemove', onMouseMove);
 
-      
+
     var linesVertices1 = new Float32Array([
       -0.4, 0.5,     1.0, 1.0, 0.0,
       -0.3, 0.5,     0.7, 0.0, 1.0        
@@ -227,6 +227,71 @@
     circleVertices2 = circleVertices2.concat(vert4);
   }
 
+  function render(){
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Perhitungan modelMatrix untuk vektor normal
+    var nm = glMatrix.mat3.create();
+    glMatrix.mat3.normalFromMat4(nm, mm);
+    gl.uniformMatrix3fv(nmLoc, false, nm);
+
+    glMatrix.mat4.lookAt(vm,
+      [camera.x, camera.y, camera.z], // di mana posisi kamera (posisi)
+      [0.0, 0.0, -2.0], // ke mana kamera menghadap (vektor)
+      [0.0, 1.0, 0.0]  // ke mana arah atas kamera (vektor)
+    );
+    gl.uniformMatrix4fv(vmLoc, false, vm);
+
+        
+    gl.uniformMatrix4fv(mmLoc, false, mm);
+
+    if (trans[0] >= (0.7 - Math.abs(0.2 * 0.7 * scaleM))) X = -1.0;
+    else if (trans[0] <= (-0.7 + Math.abs(0.2 * 0.7 * scaleM))) X = 1.0;
+    trans[0] += 0.009 * X;
+
+    if (trans[1] >= (0.5 - (0.3 * 0.7))) Y = -1.0;
+    else if (trans[1] <= (-0.7 + (0.3 * 0.7))) Y = 1.0;
+    trans[1] += 0.010 * Y;
+
+    if (trans[2] >= (0.7 - Math.abs(0.2 * 0.7 * scaleM))) Z = -1.0;
+    else if (trans[2] <= (-0.7 + Math.abs(0.2 * 0.7 * scaleM))) Z = 1.0;
+    trans[2] += 0.011 * Z;
+
+    flag = 0;
+    gl.uniform1i(flagUniformLocation, flag);
+    gl.uniform1i(fFlagUniformLocation, flag);
+    drawCube(gl.TRIANGLES, Kubus, 30)
+
+    gl.disableVertexAttribArray(vNormal);
+    gl.disableVertexAttribArray(vTexCoord);
+
+    //animasi refleksi
+    if (scaleM >= 1.0) melebar = -1.0;
+    else if (scaleM <= -1.0) melebar = 1.0;
+    
+    scaleM += 0.0186 * melebar;
+    gl.uniform1f(scaleMLoc, scaleM);
+
+    // arah cahaya berdasarkan koordinat huruf
+    dd = glMatrix.vec3.fromValues(trans[0], trans[1], trans[2]);  // xyz
+    gl.uniform3fv(ddLoc, dd);
+
+    flag = 1;
+    gl.uniform1i(flagUniformLocation, flag);
+    gl.uniform1i(fFlagUniformLocation, flag);
+    // drawShapes(gl.TRIANGLE_STRIP, verticesBatang,6);
+    // drawShapes(gl.TRIANGLE_STRIP, verticesR,362);
+    // drawShapes(gl.TRIANGLE_STRIP, verticesMiring,4);
+
+    drawShapes(gl.TRIANGLE_STRIP, line1, 3);
+    drawShapes(gl.TRIANGLE_STRIP, line2, 3);
+    // drawShapes(gl.TRIANGLE_STRIP, circleVertices, 360);
+    drawShapes(gl.TRIANGLE_STRIP, circleVertices2, 360);
+
+    gl.disableVertexAttribArray(vColor);
+    gl.enable(gl.DEPTH_TEST);
+    requestAnimationFrame(render);
+  }
    
     function drawShapes(type,vertices,n){
       var triangleVertexBufferObject = gl.createBuffer();
