@@ -269,7 +269,7 @@
     if (scaleM >= 1.0) melebar = -1.0;
     else if (scaleM <= -1.0) melebar = 1.0;
     
-    scaleM += 0.0186 * melebar;
+    scaleM += 0.0062 * melebar;
     gl.uniform1f(scaleMLoc, scaleM);
 
     // arah cahaya berdasarkan koordinat huruf
@@ -371,104 +371,81 @@
     gl.drawArrays(type, 0, n);
   }
 
-    
-    var thetaLoc1 = gl.getUniformLocation(program2, 'theta1'); 
-    var transLoc1 = gl.getUniformLocation(program2, 'trans1');
-    var thetaA1 = [10, 20, 0];
-    var trans1 = [0, 0, 0]; 
-    var X1 = 0.0080;
-    var Y1 = 0.0090;
-    var Z1 = 0.0130;
+//init tekstur
+      // Uniform untuk tekstur
+      var sampler0Loc = gl.getUniformLocation(program, 'sampler0');
+      gl.uniform1i(sampler0Loc, 0);
+  
+      // Create a texture.
+      var texture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+  
+      // Fill the texture with a 1x1 blue pixel.
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                    new Uint8Array([0, 0, 255, 255]));
+  
+      // Asynchronously load an image
+      var image = new Image();
+      image.src = "images/faces.jpg";
+      image.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
+  
+      theta = 0;
+      thetaSpeed = 0.0;
+  
+      // Definisi untuk matriks model
+      mmLoc = gl.getUniformLocation(program, 'modelMatrix');
+      mm = glMatrix.mat4.create();
+      glMatrix.mat4.translate(mm, mm, [0.0, 0.0, -2.0]);
+  
+      // Definisi untuk matrix view dan projection
+      vmLoc = gl.getUniformLocation(program, 'viewMatrix');
+      vm = glMatrix.mat4.create();
+      pmLoc = gl.getUniformLocation(program, 'projectionMatrix');
+      pm = glMatrix.mat4.create();
+  
+      camera = {x: 0.0, y: 0.0, z:0.0};
+      glMatrix.mat4.perspective(pm,
+        glMatrix.glMatrix.toRadian(90), // fovy dalam radian
+        canvas.width/canvas.height,     // aspect ratio
+        0.5,  // near
+        10.0, // far  
+      );
+      gl.uniformMatrix4fv(pmLoc, false, pm);
       
-
-  function render2(){
-    gl.useProgram(program2);
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+      scaleMLoc = gl.getUniformLocation(program, 'scaleM');
+      scaleM = 1.0;
+      gl.uniform1f(scaleMLoc, scaleM);
   
-    if(trans1[0] >= 0.4*0.8 || trans1[0] <= -0.3*0.8 ){
-      X1 *= -1;
-    }
-    trans1[0] += X1;
-
-    if(trans1[1] >= 0.6*0.8 || trans1[1] <= -0.8*0.8 ){
-      Y1 *= -1;
-    }
-    trans1[1] += Y1;
-
-    if(trans1[2] >= 0.7*0.8 || trans1[2] <= -0.6*0.8){
-      Z1 *= -1;
-    }
-    trans1[2] += Z1;
-
-    gl.uniform3fv(transLoc1, trans1);
-    thetaA1[1] += 0.062;
-    gl.uniform3fv(thetaLoc1, thetaA1);  
-  // gl.uniform1f(scaleYLocation, scaleY);
-
-    //huruf b dengan isian
-    drawShapes(gl.TRIANGLE_STRIP, line1, 3);
-    drawShapes(gl.TRIANGLE_STRIP, line2, 3);
-    drawShapes(gl.TRIANGLE_STRIP, circleVertices2, 360);
-
-    requestAnimationFrame(render2);
-  } 
-  render2();
-
-function drawShapes3(type,vertices,n) {
-    var vertexBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObject);
-
-    var vPosition = gl.getAttribLocation(program3, 'vPosition');
-    var vColor = gl.getAttribLocation(program3, 'vColor');
-
-    gl.vertexAttribPointer(
-      vPosition, //variabel pemegang posisi atribut di shader
-      3,          // jumlah elemen per atribut
-      gl.FLOAT,   // tipe data atribut
-      gl.FALSE,   
-      6 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap vertex
-      0
-    );
-
-    gl.vertexAttribPointer(
-      vColor, 
-      3, 
-      gl.FLOAT, 
-      gl.FALSE, 
-      6 * Float32Array.BYTES_PER_ELEMENT, 
-      3 * Float32Array.BYTES_PER_ELEMENT
-    );
-    gl.enableVertexAttribArray(vPosition);
-    gl.enableVertexAttribArray(vColor);
-
-    var vPosition = gl.getAttribLocation(program3, 'vPosition');
-    var vColor = gl.getAttribLocation(program3, 'vColor');
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    gl.drawArrays(type, 0, n);
-  }
+      flagUniformLocation = gl.getUniformLocation(program, 'flag');
+      flag = 0;
+      gl.uniform1i(flagUniformLocation, flag);
   
-  var thetaLocCube = gl.getUniformLocation(program3, 'theta');
+      fFlagUniformLocation = gl.getUniformLocation(program, 'fFlag');
+      gl.uniform1i(fFlagUniformLocation, flag);
   
-  function render3()
-  {
-    gl.useProgram(program3);
-    var thetaCube = [10, 10, 0];
-    gl.uniform3fv(thetaLocCube, thetaCube);
-    drawShapes3(gl.LINES, cube , 24);
-
-    requestAnimationFrame(render3);
-  }
-  // render();
-  render2();
-  render3();
-
-}
-function resizer() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-}
-
+      // Uniform untuk pencahayaan
+      dcLoc = gl.getUniformLocation(program, 'diffuseColor');
+      dc = glMatrix.vec3.fromValues(1.0, 1.0, 1.0);  // rgb
+      gl.uniform3fv(dcLoc, dc);
+      
+      ddLoc = gl.getUniformLocation(program, 'diffusePosition');
+  
+      acLoc = gl.getUniformLocation(program, 'ambientColor');
+      ac = glMatrix.vec3.fromValues(0.17, 0.40, 0.062);
+      gl.uniform3fv(acLoc, ac);
+  
+      // Uniform untuk modelMatrix vektor normal
+      nmLoc = gl.getUniformLocation(program, 'normalMatrix');
+  
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      gl.enable(gl.DEPTH_TEST);
+  
+      render();
+    }
 
 })(window || this);
