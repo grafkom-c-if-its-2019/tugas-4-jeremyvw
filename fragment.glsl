@@ -10,6 +10,7 @@ uniform vec3 diffusePosition;
 uniform vec3 ambientColor;
 uniform int fFlag;
 
+uniform sampler2D sampler0;
 
 void main() {
   if (fFlag == 0)

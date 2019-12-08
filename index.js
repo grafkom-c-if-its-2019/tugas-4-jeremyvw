@@ -3,7 +3,7 @@
   glUtils.SL.init({ callback:function() { main(); } });
 
   function main() {
-    var thetaSpeed, mmLoc, mm, vmLoc, vm, pmLoc, pm, camera;
+      var thetaSpeed, mmLoc, mm, vmLoc, vm, pmLoc, pm, camera;
       var dcLoc, dc, ddLoc, dd, acLoc, ac, nmLoc;
       var vPosition, vColor, vNormal, vTexCoord;
       var flag, flagUniformLocation, fFlagUniformLocation;
@@ -21,7 +21,7 @@
       var X = 1.0;
       var Y = 1.0;
       var Z = 1.0;
-      var melebar = 1.0
+      var melebar = 1.0;
 
       var Kubus = [];
       var cubePoints = [
@@ -140,15 +140,15 @@
       document.addEventListener('mousemove', onMouseMove);
 
 
-    var linesVertices1 = new Float32Array([
-      -0.4, 0.5,     1.0, 1.0, 0.0,
-      -0.3, 0.5,     0.7, 0.0, 1.0        
-    ]);
+    // var linesVertices1 = new Float32Array([
+    //   -0.4, 0.5,     1.0, 1.0, 0.0,
+    //   -0.3, 0.5,     0.7, 0.0, 1.0        
+    // ]);
 
-    var linesVertices2 = new Float32Array([
-      -0.3, 0.5,     1.0, 1.0, 0.0,
-      -0.3, -0.1,    0.7, 0.0, 1.0         
-    ]);
+    // var linesVertices2 = new Float32Array([
+    //   -0.3, 0.5,     1.0, 1.0, 0.0,
+    //   -0.3, -0.1,    0.7, 0.0, 1.0         
+    // ]);
 
     var circleVertices = [];
     var circleVertices1 = [];
@@ -196,14 +196,14 @@
    var circleVertices2 = [];
    
    var line1 = new Float32Array([
-    0.25, -0.1,     0.7, 0.8, 0.3,
-    0.25, +0.6,     0.0, 0.0, 0.9,
-    0.35, -0.1,     0.2, 0.0, 0.9
+    0.25, -0.1, 0.0,    0.7, 0.8, 0.3,
+    0.25, +0.6, 0.0,    0.0, 0.0, 0.9,
+    0.35, -0.1, 0.0,    0.2, 0.0, 0.9
   ]);
   var line2 = new Float32Array([
-    0.35, -0.1,     0.0, 0.0, 0.9,
-    0.35, +0.6,     0.7, 0.8, 0.3,
-    0.25, +0.6,     0.0, 0.0, 0.9
+    0.35, -0.1, 0.0,    0.0, 0.0, 0.9,
+    0.35, +0.6, 0.0,    0.7, 0.8, 0.3,
+    0.25, +0.6, 0.0,    0.0, 0.0, 0.9
   ]);
 
   var circleVertices2 = [];
@@ -215,11 +215,11 @@
     // X Y Z
     var vert3 = [
       0.2 + Math.sin(zzz)*0.05,
-      -0.1 + Math.cos(zzz)*0.15,  0.7, 0.8, 0.3
+      -0.1 + Math.cos(zzz)*0.15,  0.0, 0.7, 0.8, 0.3
     ];
     var vert4 = [
       0.2 + Math.sin(zzz)*0.15,
-      -0.1 + Math.cos(zzz)*0.3,   0.1, 0.0, 0.9
+      -0.1 + Math.cos(zzz)*0.3,   0.0, 0.1, 0.0, 0.9
     ];
     
     // vertices = vertices.concat(line01);
@@ -413,7 +413,7 @@
         glMatrix.glMatrix.toRadian(90), // fovy dalam radian
         canvas.width/canvas.height,     // aspect ratio
         0.5,  // near
-        10.0, // far  
+        10.0 // far  
       );
       gl.uniformMatrix4fv(pmLoc, false, pm);
       
